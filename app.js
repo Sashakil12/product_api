@@ -1,4 +1,4 @@
-require('dotenv').config({path:'./.dev.env'})
+require('dotenv').config({path:process.env.NODE_ENV==='development'?'./.dev.env':'./.prod.env'})
 const {app, port} = require('./index');
 const mongoose = require("mongoose")
 

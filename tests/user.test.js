@@ -1,4 +1,4 @@
-require('dotenv').config({path:'./.test.env'})
+require('dotenv').config({path:process.env.NODE_ENV==='development'?'./.dev.env':'./.prod.env'})
 const request = require('supertest');
 const app = require("../index");
 const mongoose=require("mongoose")
