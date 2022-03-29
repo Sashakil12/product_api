@@ -5,7 +5,8 @@ const port = process.env.PORT || 3000;
 //importing routers
 const userRouter = require('./routers/user');
 
-
+//config
+app.use(express.json())
 // using the "user" router
 app.use('/user', userRouter);
 

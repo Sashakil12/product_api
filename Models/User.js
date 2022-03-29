@@ -1,6 +1,6 @@
 require('dotenv').config({path:process.env.NODE_ENV==='development'?'./.dev.env':'./.prod.env'})
 const Mongoose = require("mongoose");
-
+const bcrypt = require('bcryptjs')
 const { Schema } = Mongoose;
 const jwt = require("jsonwebtoken")
 
@@ -43,7 +43,7 @@ UserSchema.statics.verifyCredentials = async (userName, password)=>{
 UserSchema.methods.getToken = async function(){    
     const token = jwt.sign({_id: this._id}, process.env.JWT_SECRET, {expiresIn: '10d'})
     
-    this.tokens = this.tokens.concat({ token })
+    this.tokens = this.tokens.concat(token)
     await this.save()
     return token
 }

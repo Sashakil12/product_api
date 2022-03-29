@@ -7,7 +7,7 @@ module.exports =  async (req, res) => {
         await user.save()
         
         res.status(201).send({
-            ...user,
+            ...user.toJSON(),
             token
         })
     } catch (e) {
