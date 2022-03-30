@@ -137,4 +137,18 @@ router.patch(
   update
 );
 
+
+//delete product route
+router.delete(
+  "/:id",
+  //checking authentication
+  auth,
+  //checking body for required data,
+  param("id").isMongoId().withMessage("invalid product id"),
+  //checking validation result
+  checkValidationResult,
+  //controller
+  update
+);
+
 module.exports = router;
