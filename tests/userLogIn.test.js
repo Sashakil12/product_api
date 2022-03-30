@@ -19,7 +19,7 @@ beforeAll(async () => {
   return mongoose.connection.db
     .collection("users")
     .createIndex({ userName: 1 }, { unique: true });
-});
+},30000);
 
 describe("testing user login flow", () => {
   test("if it rejects username shorter then the required", async () => {

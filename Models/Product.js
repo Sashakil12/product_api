@@ -9,7 +9,7 @@ const ProductSchema = new Schema({
     },
   
     categoryId: {
-      type: String, trim:true, required:true, minlength: 8,
+      type: Number,
     },
     categoryName:{type:String},
     unitPrice:{type:Number, required:true},

@@ -8,18 +8,19 @@ router.get(
   "/",
   //validating query params
   query("limit")
-    .exists()
+    .exists({checkFalsy:true, checkNull:true})
     .withMessage("limit is required")
-    .toInt()
-    .withMessage("invalid parameter 'limit'"),
-    query("skip")
-    .exists()
+    .isInt({ min: 0, max: 250 })
+    .withMessage(
+      "invalid parameter 'limit' must be a number between 0 and 250"
+    ),
+  query("skip")
+    .exists({checkFalsy:true, checkNull:true})
     .withMessage("skip is required")
-    .toInt()
-    .withMessage("invalid parameter 'skip'"),
-    //check validation errors,
-    checkValidationResult,
-    //controller
+    .isInt({ min: 0}).withMessage("invalid parameter 'skip' must be a number greater than 0"),
+  //check validation errors,
+  checkValidationResult,
+  //controller
   getAll
 );
 
