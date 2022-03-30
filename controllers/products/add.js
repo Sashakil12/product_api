@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       unitPrice: req.body.unitPrice,
       status: req.body.status,
     });
-    res.send(products);
+    res.status(201).send(products);
   } catch (e) {
     console.log(e);
     res.status(500).send(e);

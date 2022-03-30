@@ -63,7 +63,7 @@ router.post(
     .withMessage("name is required")
     .isString()
     .withMessage("name must be a string")
-    .length({ min: 1, max: 100 })
+    // .length({ min: 1, max: 100 })
     .withMessage("name must be between 1 and 50 characters"),
   body("categoryId")
     .exists({ checkFalsy: true, checkNull: true })
@@ -77,7 +77,7 @@ router.post(
     .withMessage("categoryName is required")
     .isString()
     .withMessage("categoryName must be a string")
-    .length({ min: 1, max: 50 })
+    // .length({ min: 1, max: 50 })
     .withMessage("categoryName must be between 1 and 50 characters"),
   body("unitPrice")
     .exists({ checkFalsy: true, checkNull: true })
