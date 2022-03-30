@@ -13,6 +13,6 @@ module.exports = async (req, res) => {
     res.status(201).send(product);
   } catch (e) {
     console.log(e);
-    res.status(500).send(e);
+    res.status(500).send({code:e.code||0,message:e.message||"internal server error"});
   }
 };

@@ -7,6 +7,8 @@ const auth = require("../utils/auth");
 const add = require("../controllers/products/add");
 const update = require("../controllers/products/update");
 const deleteProduct = require("../controllers/products/delete");
+const deleteProductMany = require("../controllers/products/deleteMany");
+const mongoose = require("mongoose");
 //public product route
 router.get(
   "/",
@@ -137,6 +139,27 @@ router.patch(
   //controller
   update
 );
+//delete many product route
+router.delete(
+  "/multiple",
+  //checking authentication
+  auth,
+  //checking body for required data,
+  body("ids").isArray({min:1}).withMessage("at least one id is required").custom((arr)=>{
+    let isValid = true;
+    arr.forEach(id=>{
+      if(!mongoose.Types.ObjectId.isValid(id)){
+        isValid = false;
+      }
+    })
+    return isValid;
+
+  }),
+  //checking validation result
+  checkValidationResult,
+  //controller
+  deleteProductMany
+);
 
 //delete product route
 router.delete(
@@ -150,5 +173,6 @@ router.delete(
   //controller
   deleteProduct
 );
+
 
 module.exports = router;
