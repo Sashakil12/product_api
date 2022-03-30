@@ -6,6 +6,7 @@ const checkValidationResult = require("../utils/checkValidationResult");
 const auth = require("../utils/auth");
 const add = require("../controllers/products/add");
 const update = require("../controllers/products/update");
+const deleteProduct = require("../controllers/products/delete");
 //public product route
 router.get(
   "/",
@@ -137,7 +138,6 @@ router.patch(
   update
 );
 
-
 //delete product route
 router.delete(
   "/:id",
@@ -148,7 +148,7 @@ router.delete(
   //checking validation result
   checkValidationResult,
   //controller
-  update
+  deleteProduct
 );
 
 module.exports = router;
