@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { query, body } = require("express-validator");
+const { query, body, param } = require("express-validator");
 const getAll = require("../controllers/products/getAll");
 const getAllForAuthenticatedUser = require("../controllers/products/getAllForAuthenticatedUser");
 const checkValidationResult = require("../utils/checkValidationResult");
@@ -57,6 +57,54 @@ router.post(
   //checking authentication
   auth,
   //checking body for required data,
+  body("name")
+    .trim()
+    .exists({ checkFalsy: true, checkNull: true })
+    .withMessage("name is required")
+    .isString()
+    .withMessage("name must be a string")
+    // .length({ min: 1, max: 100 })
+    .withMessage("name must be between 1 and 50 characters"),
+  body("categoryId")
+    .exists({ checkFalsy: true, checkNull: true })
+    .withMessage("categoryId is required")
+    .isNumeric()
+    .withMessage("categoryId must be a number")
+    .toInt({ min: 1 }),
+  body("categoryName")
+    .trim()
+    .exists({ checkFalsy: true, checkNull: true })
+    .withMessage("categoryName is required")
+    .isString()
+    .withMessage("categoryName must be a string")
+    // .length({ min: 1, max: 50 })
+    .withMessage("categoryName must be between 1 and 50 characters"),
+  body("unitPrice")
+    .exists({ checkFalsy: true, checkNull: true })
+    .withMessage("unitPrice is required")
+    .isNumeric()
+    .withMessage("unitPrice must be a number")
+    .toFloat({ min: 0 })
+    .withMessage("unitPrice must be between 1 and 50 characters"),
+  body("status")
+    .trim()
+    .exists({ checkFalsy: true, checkNull: true })
+    .withMessage("status is required")
+    .isIn(["available", "discontinued"])
+    .withMessage("status must be 'available' or 'discontinued'"),
+    //checking validation result
+    checkValidationResult,  
+  //controller
+  add
+);
+
+//update product route
+router.patch(
+  "/:id",
+  //checking authentication
+  auth,
+  //checking body for required data,
+  param("id").isMongoId().withMessage("invalid product id"),
   body("name")
     .trim()
     .exists({ checkFalsy: true, checkNull: true })

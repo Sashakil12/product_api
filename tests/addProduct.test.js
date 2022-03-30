@@ -45,7 +45,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ ...rest })
+      .send({ ...rest, name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
   test("it rejects a request without 'categoryName' in body", async () => {
@@ -53,7 +53,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ ...rest })
+      .send({ ...rest,name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
   test("it rejects a request without 'unitPrice' in body", async () => {
@@ -61,7 +61,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ ...rest })
+      .send({ ...rest,name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
   test("it rejects a request without 'status' in body", async () => {
@@ -69,16 +69,16 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ ...rest })
+      .send({ ...rest,name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
   test("it converts a non-string 'name' in to string body", async () => {
     const { name, ...rest } = productData;
-    const invalidName = 12554;
+    const invalidName = Math.round(Math.random()*1000);
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ name: 12554, ...rest })
+      .send({ name: invalidName, ...rest })
       .expect(201);
     expect(response.body.name).toBe(String(invalidName));
   });
@@ -87,7 +87,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ categoryId: "aaa", ...rest })
+      .send({ categoryId: "aaa", ...rest, name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
   test("it converts a non string 'categoryName' to string in body", async () => {
@@ -96,7 +96,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ categoryName: invalidCategoryName, ...rest })
+      .send({ categoryName: invalidCategoryName, ...rest, name:rest.name+Math.round(Math.random()*1000) })
       .expect(201);
     expect(response.body.categoryName).toBe(String(invalidCategoryName));
   });
@@ -107,7 +107,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ unitPrice: invalidUnitPrice, ...rest })
+      .send({ unitPrice: invalidUnitPrice, ...rest, name:rest.name+Math.round(Math.random()*1000) })
       .expect(201);
     expect(response.body.unitPrice).toBe(Number(invalidUnitPrice));
   });
@@ -117,7 +117,7 @@ describe("testing request body for add product call", () => {
     const response = await request(app)
       .post("/product/add")
       .set("Authorization", "Bearer " + token)
-      .send({ status: invalidStatus, ...rest })
+      .send({ status: invalidStatus, ...rest,name:rest.name+Math.round(Math.random()*1000) })
       .expect(422);
   });
 });
@@ -130,7 +130,7 @@ describe('adding products with valid data', ()=>{
       .set("Authorization", "Bearer " + token)
       .send(productData)
       .expect(201);
-      const {_id, ...rest} = response.body;
+      const {_id,createdAt, updatedAt,__v, ...rest} = response.body;
       expect(rest).toEqual(productData);
   });
 })
