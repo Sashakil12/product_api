@@ -88,7 +88,7 @@ describe("checking public fetch products behaviors with products data on db", ()
   beforeAll(async () => {
     return await Product.insertMany([...seedData]);
   });
-  test("returns a product array when there is products", async () => {
+  test("returns a product array when there is products with only approved products", async () => {
     const response = await request(app)
       .get("/product?limit=249" + "&skip=0")
       .expect(200);
