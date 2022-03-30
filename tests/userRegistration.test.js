@@ -24,10 +24,34 @@ beforeAll(async () => {
   } else {
     return;
   }
-});
+}, 30000);
 
 
 describe("testing user registration flow", () => {
+  test("if it rejects request with no username", async () => {
+    const response = await request(app)
+      .post("/user/register")
+      .send({
+      
+        password: "test",
+      })
+      .expect(422);
+    expect(response.body.errors[0].msg).toBe(
+      "userName is required"
+    );
+  });
+  test("if it rejects request with no password", async () => {
+    const response = await request(app)
+      .post("/user/register")
+      .send({
+      userName:"ty56uyurt4",
+
+      })
+      .expect(422);
+    expect(response.body.errors[0].msg).toBe(
+      "password is required"
+    );
+  });
   test("if it rejects username shorter then the required", async () => {
     const response = await request(app)
       .post("/user/register")
