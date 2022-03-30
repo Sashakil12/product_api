@@ -84,7 +84,7 @@ router.post(
     .withMessage("unitPrice is required")
     .isNumeric()
     .withMessage("unitPrice must be a number")
-    .toInt({ min: 0 })
+    .toFloat({ min: 0 })
     .withMessage("unitPrice must be between 1 and 50 characters"),
   body("status")
     .trim()
