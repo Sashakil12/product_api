@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 const Product = require("../Models/Product");
 const User = require("../Models/User");
 const productData = require("./fixtures/singleProductData");
-
+let token;
+let userId;
 beforeAll(async () => {
   //connects to the database
   try {
@@ -136,4 +137,5 @@ describe('adding products with valid data', ()=>{
 })
 afterAll(async () => {
   await User.deleteOne({ _id: userId });
+  await Product.deleteMany({})
 });
