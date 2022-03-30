@@ -7,10 +7,11 @@ async function auth(req, res, next){
         const token = req.header('Authorization').replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         const user = await User.findById({_id:decoded._id, 'tokens':token});
+        
         if (!user) {
             throw new Error("couldn\'t log you in");
         }
-        
+
         req.token = token;
         req.user = user;
         next()
