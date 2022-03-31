@@ -1,7 +1,8 @@
 const {validationResult} = require('express-validator');
 module.exports = (req, res, next)=>{
     if(process.env.NODE_ENV==='development'){
-        console.log(req.body)
+        console.log("body",req.body)
+        console.log("query",req.query)
     }
     const errors = validationResult(req);
     if(!errors.isEmpty()){

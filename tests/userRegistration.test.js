@@ -1,56 +1,56 @@
 require("dotenv").config({
   path: "../.test.env",
 });
+console.log(process.env.DB_URL)
 const request = require("supertest");
 const { app } = require("../index");
 const mongoose = require("mongoose");
 const User = require("../Models/User");
 beforeAll(async () => {
   //connects to the database
-  await mongoose.connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  // Clears the database and adds some testing data.
-  const collections = await mongoose.connection.db.listCollections().toArray();
-  console.log(collections);
-  if (collections.map((el) => el.name === "users")) {
-    console.log("has user");
-    await mongoose.connection.db.dropCollection("users");
-    await mongoose.connection.db.createCollection("users");
+  try {
+    await mongoose.connect(process.env.DB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    // Clears the database and adds some testing data.
+    const collections = await mongoose.connection.db
+      .listCollections()
+      .toArray();
+    console.log(collections);
+    if (collections.find((el) => el.name === "users")) {
+      console.log("has user");
+      await mongoose.connection.db.dropCollection("users");
+    } else {
+      await  mongoose.connection.db.createCollection("users");
+    }
     return mongoose.connection.db
-      .collection("users")
-      .createIndex({ userName: 1 }, { unique: true });
-  } else {
-    return;
+        .collection("users")
+        .createIndex({ userName: 1 }, { unique: true });
+  } catch (e) {
+    console.log(e)
+    throw e;
   }
 }, 30000);
-
 
 describe("testing user registration flow", () => {
   test("if it rejects request with no username", async () => {
     const response = await request(app)
       .post("/user/register")
       .send({
-      
         password: "test",
       })
       .expect(422);
-    expect(response.body.errors[0].msg).toBe(
-      "userName is required"
-    );
+    expect(response.body.errors[0].msg).toBe("userName is required");
   });
   test("if it rejects request with no password", async () => {
     const response = await request(app)
       .post("/user/register")
       .send({
-      userName:"ty56uyurt4",
-
+        userName: "ty56uyurt4",
       })
       .expect(422);
-    expect(response.body.errors[0].msg).toBe(
-      "password is required"
-    );
+    expect(response.body.errors[0].msg).toBe("password is required");
   });
   test("if it rejects username shorter then the required", async () => {
     const response = await request(app)
@@ -87,7 +87,7 @@ describe("testing user registration flow", () => {
     expect(response.body.errors[0].param).toBe("userName");
     expect(response.body.errors[0].msg).toBe("Invalid value");
   });
-    test("if it successfully registers a user with valid data", async () => {
+  test("if it successfully registers a user with valid data", async () => {
     const response = await request(app)
       .post("/user/register")
       .send({
