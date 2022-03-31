@@ -48,34 +48,52 @@ beforeAll(async () => {
   }
 }, 30000);
 
+describe("testing authentication/authorization", () => {
+  test("it rejects a request without Authorization header", async () => {
+    const response = await request(app)
+      .get("/product/all?skip=0")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(422);
+  });
+});
+
 describe("testing authenticated product fetch route calls with valid/invalid params", () => {
   test("it rejects a request without the query param limit", async () => {
     const response = await request(app)
       .get("/product/all?skip=0")
-      .set("Authorization", "Bearer " + token)
+      .set("Authorization", `Bearer ${token}`)
       .expect(422);
     expect(response.body.errors[0].msg).toBe("limit is required");
   });
   test("it rejects a request without the query param skip", async () => {
-    const response = await request(app).get("/product/all?limit=0").expect(422);
+    const response = await request(app)
+      .get("/product/all?limit=0")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(422);
     expect(response.body.errors[0].msg).toBe("skip is required");
   });
   test("it rejects a request without both query and limit", async () => {
-    const response = await request(app).get("/product/all").expect(422);
+    const response = await request(app)
+      .get("/product/all")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(422);
     expect(response.body.errors[0].msg).toBe("limit is required");
     expect(response.body.errors[2].msg).toBe("skip is required");
   });
   test("it rejects a request with a negative value for limit", async () => {
     const response = await request(app)
       .get("/product/all?limit=-8" + "&skip=0")
+      .set("Authorization", `Bearer ${token}`)
       .expect(422);
     expect(response.body.errors[0].msg).toBe(
       "invalid parameter 'limit' must be a number between 0 and 250"
     );
   });
+
   test("it rejects a request with a negative value for skip", async () => {
     const response = await request(app)
       .get("/product/all?limit=8" + "&skip=-25")
+      .set("Authorization", `Bearer ${token}`)
       .expect(422);
     expect(response.body.errors[0].msg).toBe(
       "invalid parameter 'skip' must be a number greater than 0"
@@ -84,6 +102,7 @@ describe("testing authenticated product fetch route calls with valid/invalid par
   test("it rejects a request with a limit value greater that 250", async () => {
     const response = await request(app)
       .get("/product/all?limit=255" + "&skip=25")
+      .set("Authorization", `Bearer ${token}`)
       .expect(422);
     expect(response.body.errors[0].msg).toBe(
       "invalid parameter 'limit' must be a number between 0 and 250"
@@ -95,7 +114,7 @@ describe("checking authenticated fetch products behaviors with no product data o
   test("returns an empty array when there is no products", async () => {
     const response = await request(app)
       .get("/product/all?limit=250" + "&skip=0")
-      .set("Authorization", "Bearer " + token)
+      .set("Authorization", `Bearer ${token}`)
       .expect(200);
     expect(response.body).toEqual([]);
   });
@@ -108,7 +127,7 @@ describe("checking authenticated fetch products behaviors with products data on 
   test("returns a product array with approved products when there is products", async () => {
     const response = await request(app)
       .get("/product/all?limit=249" + "&skip=0")
-      .set("Authorization", "Bearer " + token)
+      .set("Authorization", `Bearer ${token}`)
       .expect(200);
 
     expect(response.body.length).toEqual(seedData.length);
