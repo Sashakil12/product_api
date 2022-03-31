@@ -1,4 +1,5 @@
-require("dotenv").config({ path: "../.test.env" });
+require('dotenv').config({path:__dirname+"/../.test.env"})
+
 const request = require("supertest");
 const { app } = require("../index");
 const mongoose = require("mongoose");
@@ -82,7 +83,6 @@ describe("testing user login flow", () => {
       .post("/user/login")
       .send(userData)
       .expect(200);
-    console.log(response.body);
     expect(response.body.userName).toBe(userData.userName);
   });
 });
