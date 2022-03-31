@@ -6,6 +6,7 @@ const checkValidationResult = require("../utils/checkValidationResult");
 const auth = require("../utils/auth");
 const add = require("../controllers/products/add");
 const update = require("../controllers/products/update");
+const deleteProduct = require("../controllers/products/delete");
 //public product route
 router.get(
   "/",
@@ -135,6 +136,19 @@ router.patch(
   checkValidationResult,
   //controller
   update
+);
+
+//delete product route
+router.delete(
+  "/:id",
+  //checking authentication
+  auth,
+  //checking body for required data,
+  param("id").isMongoId().withMessage("invalid product id"),
+  //checking validation result
+  checkValidationResult,
+  //controller
+  deleteProduct
 );
 
 module.exports = router;
