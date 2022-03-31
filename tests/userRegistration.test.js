@@ -1,6 +1,5 @@
-require("dotenv").config({
-  path: "../.test.env",
-});
+require('dotenv').config({path:__dirname+"/../.test.env"})
+
 console.log(process.env.DB_URL)
 const request = require("supertest");
 const { app } = require("../index");

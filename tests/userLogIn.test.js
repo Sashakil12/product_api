@@ -1,4 +1,5 @@
-require("dotenv").config({ path: "../.test.env" });
+require('dotenv').config({path:__dirname+"/../.test.env"})
+
 const request = require("supertest");
 const { app } = require("../index");
 const mongoose = require("mongoose");
