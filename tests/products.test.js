@@ -17,9 +17,8 @@ beforeAll(async () => {
     const collections = await mongoose.connection.db
       .listCollections()
       .toArray();
-    console.log(collections);
+    
     if (collections.find((el) => el.name === "products")) {
-      console.log("has user");
       await mongoose.connection.db.dropCollection("products");
     } else {
       await mongoose.connection.db.createCollection("products");
@@ -28,7 +27,6 @@ beforeAll(async () => {
       .collection("products")
       .createIndex({ name: 1 }, { unique: true });
   } catch (e) {
-    console.log(e);
     throw e;
   }
 }, 30000);

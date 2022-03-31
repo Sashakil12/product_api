@@ -83,7 +83,6 @@ describe("testing user login flow", () => {
       .post("/user/login")
       .send(userData)
       .expect(200);
-    console.log(response.body);
     expect(response.body.userName).toBe(userData.userName);
   });
 });

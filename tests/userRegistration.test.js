@@ -1,6 +1,5 @@
 require('dotenv').config({path:__dirname+"/../.test.env"})
 
-console.log(process.env.DB_URL)
 const request = require("supertest");
 const { app } = require("../index");
 const mongoose = require("mongoose");
@@ -16,9 +15,7 @@ beforeAll(async () => {
     const collections = await mongoose.connection.db
       .listCollections()
       .toArray();
-    console.log(collections);
     if (collections.find((el) => el.name === "users")) {
-      console.log("has user");
       await mongoose.connection.db.dropCollection("users");
     } else {
       await  mongoose.connection.db.createCollection("users");
@@ -27,7 +24,6 @@ beforeAll(async () => {
         .collection("users")
         .createIndex({ userName: 1 }, { unique: true });
   } catch (e) {
-    console.log(e)
     throw e;
   }
 }, 30000);
@@ -95,7 +91,6 @@ describe("testing user registration flow", () => {
       })
       .expect(201);
     const user = await User.findById(response.body._id);
-    console.log(user);
     expect(user).not.toBeNull();
 
     expect(response.body._id).toEqual(String(user._id));
